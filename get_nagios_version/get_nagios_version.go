@@ -3,14 +3,20 @@ package get_nagios_version
 import (
 	"net/http"
 	"strings"
+	"time"
 
 	"golang.org/x/net/html"
 )
 
 func GetLatestNagiosXIVersion(NagiosXIURL string) (version string, err error) {
 
+	// Initialize a client with a timeout in case of connection issues
+	client := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+
 	// Fetch the HTML source data from the URL
-	resp, err := http.Get(NagiosXIURL)
+	resp, err := client.Get(NagiosXIURL)
 	if err != nil {
 		return "", err
 	}
